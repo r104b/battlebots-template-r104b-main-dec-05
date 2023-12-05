@@ -1,0 +1,127 @@
+//  * <b>Introduction</b>
+//  * <br><br>
+//  * This class implements a multi-agent competitive game application. Players contribute a
+//  * single Java class that defines a "Bot", and these Bots battle each other in a
+//  * multiple round tournament under the control of a BattleBotsArena object. For instructions
+//  * on how to create a Bot, see the documentation in
+//  * the class named <i>Bot</i>. For instructions on how to add Bots to the arena,
+//  * see the documentation for the <i>fullReset()</i> method in this class.<br><br>
+//  *
+//  * <b>The Game Engine</b><br><br>
+//  *
+//  * The Arena attempts to run at 30 frames per second, but the actual frame rate may be
+//  * lower on slower systems. At each frame, the arena does the following for each
+//  * Bot b that is still alive and not <i>overheated</i>:
+//  *
+//  *<ol><li>Gets the team name using <i>b.getTeamName()</i></li>
+//  *
+//  * 	  <li>Gets the next move using <i>b.getMove(BotInfo, boolean, BotInfo[], BotInfo[], Bullet[])</i></li>
+//  *
+//  * 	  <li>Processes the move only if it is legal (i.e. moves are allowed only if no collisions; bullets and messages are allowed only if the max number of bullets is not exceeded)</li>
+//  *
+//  * 	  <li>If the move was SEND_MESSAGE, calls <i>b.outGoingMessage()</i> to get the message from the Bot, then broadcasts it to all live Bots using <i>b.incomingMessage(int, msg)</i></li>
+//  *
+//  * 	  <li>Draws each Bot using <i>b.draw(Graphics)</i></li></ol>
+//  * <br>
+//  * <b>Timing</b><br><br>
+//  *
+//  * The clock records real time in seconds regardless of the actual number of frames
+//  * that have been processed. The clock will run faster when the play is sped up to x2,
+//  * x4, or x8 (do this by mousing over the clock and using the scroll wheel). However, depending
+//  * on the speed of your computer, you may not get 2x, 4x, or 8x as many frames in that time,
+//  * so you should test your Bots at regular speed whenever possible. <br><br>
+//  *
+//  * <b>Bot Movement</b> <br><br>
+//  *
+//  * The arena allows each Bot to move vertically or horizontally at a set speed,
+//  * to fire bullets horizontally or vertically, and to send messages. The speeds
+//  * of the Bots and Bullets are configurable using static constants. The number
+//  * of messages that can be sent is capped, as is the number of bullets that each
+//  * Bot can have on screen at a time (Bot's names show in red when they are
+//  * unable to fire, and a message is broadcast by the referee when a Bot's
+//  * messaging is capped).<br><br>
+//  *
+//  * <b>Info Passed to the Bots</b><br><br>
+//  *
+//  * When asking for a Bot's move, the arena passes an array of Bullets, arrays
+//  * of info concerning live and dead Bots, a boolean indicating whether the Bot
+//  * is currently able to shoot, and a single object containing the public
+//  * information about the Bot itself (see the abstract class Bot for more info
+//  * on all this). No Bot is ever given any access to any internal variables or
+//  * data structures of the arena, the Bullets, or other Bots. <br><br>
+//  *
+//  * <b>Collisions</b> <br><br>
+//  *
+//  * The size of a Bot is defined by the constant <i>Bot.RADIUS</i>. The centre point
+//  * of each Bot is defined as <i>(x+Bot.Radius, y+Bot.RADIUS)</i>, where x and y are
+//  * the top left corner of a square in which the bot is inscribed. The width
+//  * and height of each Bot is <i>Bot.RADIUS * 2</i>. Each Bot has a circular collision
+//  * mask in a radius of Bot.RADIUS from this centre point. Bullets have a single
+//  * point collision mask (the pixel at the front of the Bullet) and are created one
+//  * pixel over from the edge of the Bot that fired them, in the middle of the side
+//  * from which they were fired (i.e. vertical bullets have an x coordinate of
+//  * <i>x+Bot.Radius</i> and horizontal bullets have a y coordinate of <i>y+Bot.RADIUS</i>).
+//  * Two bots have collided if the euclidean distance between their centre points is
+//  * equal to <i>Bot.RADIUS*2</i> or less).<br><br>
+//  *
+//  * <b>Bot CPU Usage</b> <br><br>
+//  *
+//  * Processor time is monitored using calls to <i>System.nanoTime()</i> any time
+//  * a Bot method is used (i.e. for drawing, getting the next move, getting the bot's
+//  * name and team name, message processing, etc.) This is not perfect, but it does
+//  * give an approximate estimate of how
+//  * much CPU each Bot is consuming. A small number of points per round are awarded
+//  * for low CPU usage (see <i>Scoring</i> below). If the cumulative CPU time for any
+//  * Bot exceeds 2 seconds (configurable using the static constants), the Bot will
+//  * <i>overheat</i> and become disabled. At this point, the Bot is replaced by a stock image
+//  * symbol and there will be no more method calls to that particular Bot for
+//  * the remainder of the round.<br><br>
+//  *
+//  * <b>Buggy Bots</b><br><br>
+//  *
+//  * When a Bot throws an exception, the exception is caught by the system and a
+//  * scoring penalty is applied (defined by static constants in this class).<br><br>
+//  *
+//  * <b>Dead Bots</b><br><br>
+//  *
+//  * When a Bot is destroyed, it is replaced with a "dead bot" icon and becomes
+//  * an obstacle on the course. There will be no more method calls to that
+//  * particular Bot for the remainder of the round.<br><br>
+//  *
+//  * <b>Scoring</b><br><br>
+//  *
+//  * Bots are awarded points for each kill (whether or not they are alive when their bullet
+//  * hits), and points for each second they stay alive in the round. The round ends
+//  * after a set time, or after there are 1 or fewer Bots left. If a Bot is left at the
+//  * end of the round, it is awarded time points based for the entire length the round
+//  * would have been if it had continued. Point values are increased each each round.<br><br>
+//  *
+//  * In addition to these base points, there are penalties for each exception thrown, and
+//  * there is a small bonus for low CPU equal to two points minus the number of seconds of
+//  * CPU time used. This bonus allows ties to be broken (e.g. if two Bots each kill four
+//  * other Bots and survive to the end of the round, it is usually possible to declare a
+//  * winner based on CPU time). <br><br>
+//  *
+//  * Five Bots are dropped after each round, until six or fewer Bots are left. So if the
+//  * game starts with 16 Bots(the default) there will be 3 rounds of play. (16 bots, 11 bots,
+//  * and 6 bots respectively).<br><br>
+//  *
+//  * All scoring values and other numbers mentioned in this section can be configured using
+//  * the static constants of this class. In addition, the game can
+//  * be played so that the winning Bot is the one with the highest cumulative score at the
+//  * end of multiple rounds, or it can be the Bot that wins the final round.<br><br>
+//  *
+//  * <b>Debugging Features</b><br><br>
+//  *
+//  * The arena contains a number of features to aid debugging. The screen that comes up
+//  * when the Arena is first run is a "Test Mode" screen that allows you to track CPU time
+//  * and exceptions, view the name and team of each Bot, and check that drawing and
+//  * movement is within the allowed limits. There is also a DEBUG flag that can be
+//  * set to TRUE to view statistics while the game is on. The game can be sped up
+//  * to make it easier to view the outcome of each test match quickly (see the
+//  * notes under <i>Timing</i> above), and pausing the game provides just over one
+//  * second of instant replay to watch your Bots' actions in more detail. Finally,
+//  * there is a "HumanBot" character that you can control with the keyboard to further
+//  * test your Bots' performance.<br><br>
+//  *
+//  *
