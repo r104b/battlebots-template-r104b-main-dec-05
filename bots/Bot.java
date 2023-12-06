@@ -76,7 +76,8 @@ public abstract class Bot {
 	 * The radius of a Bot. Each Bot should fit into a circle inscribed into a
 	 * square with height and width equal to RADIUS * 2.
 	 */
-	public static final int RADIUS = 25; //ROWBOTTOM was 10
+	public static final int RADIUS = 13; //ROWBOTTOM was 10
+	public static final int RADIUS2 = 19; //a second radius for detection of other bots within circle
 
 	/**
 	 * This is your Bot's number, a unique identifier assigned at the beginning of each round.

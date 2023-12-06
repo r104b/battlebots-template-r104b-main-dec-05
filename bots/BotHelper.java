@@ -58,7 +58,7 @@ public class BotHelper {
 			distance = Math.abs(_me.getX() - _bullets[i].getX()) + Math.abs(_me.getY() - _bullets[i].getY());
 			if (distance < closestDist) {
 				closest = _bullets[i];
-				closestDist = distance;
+				closestDist = distance; 
 			}
 		}
 		return closest;
