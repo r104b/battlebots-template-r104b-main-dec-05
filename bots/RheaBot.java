@@ -230,7 +230,6 @@ public class RheaBot extends Bot {
 	}
 
 
-
 	//************************************************************
 	//ADDED CODE - AVOID BULLET AND SHOOTING + COLLISION DETECTION
 	//************************************************************

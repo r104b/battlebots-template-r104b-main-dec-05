@@ -76,8 +76,16 @@ public class BotHelper {
 				closest = _bots[i];
 				closestDist = distance;
 			}
+
+			if (closestDist >= 25) {
+				
+			}
 		}
 		return closest;
+	}
+
+	public void shootBot() {
+
 	}
 
 	/**
