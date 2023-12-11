@@ -2,7 +2,6 @@ package bots;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-//91 is amount of bullets shot after each move
 
 import arena.BattleBotArena;
 import arena.BotInfo;
@@ -40,9 +39,18 @@ public class RheaBot extends Bot {
 	 * Counter for timing moves in different directions
 	 */
 	private int moveCount = 99;
+
+	//countdown
+	private int countDown = 0;
 	/**
 	 * Next move to make
 	 */
+	//get warned about other bots
+	private boolean[] warned;
+
+	//messages warning
+	String[] messages = {"Stand back ","You are too close, ","Get back or face the consequences, ","Hands up, "};
+
 	private int move = BattleBotArena.UP;
 	/**
 	 * Counter to pause before sending a victory message
@@ -89,7 +97,10 @@ public class RheaBot extends Bot {
 			current = up;
 		}
 	}
+	
 
+
+	
 	/**
 	 * Generate a random direction, then stick with it for a random count between
 	 * 30 and 90 moves. Randomly take a shot when done each move.
@@ -97,71 +108,21 @@ public class RheaBot extends Bot {
 	public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets)
 	{
 
-		double myPosX = me.getX();
-		double myPosY = me.getY();
-
-		//avoid bullet
-
-		Bullet closestBullet = bothelper.findClosest(me, bullets);
-
-		double bulletPosX = closestBullet.getX();
-		double bulletPosY = closestBullet.getY();
-
-		if (bulletPosX >= myPosX-10 || bulletPosX <= myPosX-10 || bulletPosX >= myPosX + 10 || bulletPosX <= myPosX + 10) {
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIRERIGHT;
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIREDOWN;
-			move = BattleBotArena.LEFT;
-
-		} else if (bulletPosY >= myPosY-10 || bulletPosY <= myPosY-10 || bulletPosY >= myPosY + 10 || bulletPosY <= myPosY+10){
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIRERIGHT;
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIREDOWN;
-			move = BattleBotArena.UP;
-
-		} else if (bulletPosX >= myPosX-20 || bulletPosX <= myPosX-20 || bulletPosX >= myPosX + 20 || bulletPosX <= myPosX + 20){
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIRERIGHT;
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIREDOWN;
-			move = BattleBotArena.DOWN;
-
-		} else if (bulletPosY >= myPosY-20 || bulletPosY <= myPosY-20 || bulletPosY >= myPosY + 20 || bulletPosY <= myPosY + 20){
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIRERIGHT;
-			move = BattleBotArena.FIREUP;
-			move = BattleBotArena.FIREDOWN;
-			move = BattleBotArena.RIGHT;
-		}
-
-		// for overheating
-		if (overheat){try{Thread.sleep(sleep);}catch (Exception e){}}
-
 		// increase the move counter
-		moveCount++;
 
-		// Is it time to send a message?
-		if (--msgCounter == 0)
-		{
-			move = BattleBotArena.SEND_MESSAGE;
-			moveCount = 99;
-		}
-		// Time to choose a new move?
-		else if (moveCount >= 30+(int)Math.random()*60)
-		{
+		
+
 			moveCount = 0;
 			int choice = (int)(Math.random()*8);
 			if (choice == 0)
 			{
 				move = BattleBotArena.UP;
-				current=up;
+				current = up;
 			}
 			else if (choice == 1)
 			{
 				move = BattleBotArena.DOWN;
-				current=down;
+				current = down;
 			}
 			else if (choice == 2)
 			{
@@ -179,7 +140,7 @@ public class RheaBot extends Bot {
 				moveCount = 99; // make sure we choose a new move next time
 				current=up;
 			}
-			else if (choice == 5)  
+			else if (choice == 5)
 			{
 				move = BattleBotArena.FIREDOWN;
 				moveCount = 99; // make sure we choose a new move next time
@@ -197,9 +158,10 @@ public class RheaBot extends Bot {
 				moveCount = 99; // make sure we choose a new move next time
 				current=right;
 			}
-		}
+		
 		return move;
 	}
+
 
 
 
