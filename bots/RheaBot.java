@@ -100,16 +100,41 @@ public class RheaBot extends Bot {
 		double myPosX = me.getX();
 		double myPosY = me.getY();
 
+		//avoid bullet
+
 		Bullet closestBullet = bothelper.findClosest(me, bullets);
 
 		double bulletPosX = closestBullet.getX();
 		double bulletPosY = closestBullet.getY();
 
-		if (bulletPosX >= myPosX || bulletPosX <= myPosX) {
+		if (bulletPosX >= myPosX-10 || bulletPosX <= myPosX-10 || bulletPosX >= myPosX + 10 || bulletPosX <= myPosX + 10) {
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIRERIGHT;
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIREDOWN;
 			move = BattleBotArena.LEFT;
-		} else if (bulletPosY >= myPosY || bulletPosY <= myPosY) {
-			move = BattleBotArena.UP; 
-		} 
+
+		} else if (bulletPosY >= myPosY-10 || bulletPosY <= myPosY-10 || bulletPosY >= myPosY + 10 || bulletPosY <= myPosY+10){
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIRERIGHT;
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIREDOWN;
+			move = BattleBotArena.UP;
+
+		} else if (bulletPosX >= myPosX-20 || bulletPosX <= myPosX-20 || bulletPosX >= myPosX + 20 || bulletPosX <= myPosX + 20){
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIRERIGHT;
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIREDOWN;
+			move = BattleBotArena.DOWN;
+
+		} else if (bulletPosY >= myPosY-20 || bulletPosY <= myPosY-20 || bulletPosY >= myPosY + 20 || bulletPosY <= myPosY + 20){
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIRERIGHT;
+			move = BattleBotArena.FIREUP;
+			move = BattleBotArena.FIREDOWN;
+			move = BattleBotArena.RIGHT;
+		}
 
 		// for overheating
 		if (overheat){try{Thread.sleep(sleep);}catch (Exception e){}}
@@ -154,7 +179,7 @@ public class RheaBot extends Bot {
 				moveCount = 99; // make sure we choose a new move next time
 				current=up;
 			}
-			else if (choice == 5)
+			else if (choice == 5)  
 			{
 				move = BattleBotArena.FIREDOWN;
 				moveCount = 99; // make sure we choose a new move next time
@@ -183,9 +208,8 @@ public class RheaBot extends Bot {
 	 */
 	public void newRound()
 	{
-		if (botNumber >= targetNum-3 && botNumber <= targetNum + 3)
-			overheat = true;
-	}
+	 	
+	 }
 
 	/**
 	 * Send the message and then blank out the message string
