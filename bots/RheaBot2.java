@@ -15,6 +15,7 @@ import arena.Bullet;
  * @version 1.0 (March 3, 2011)
  */
 public class RheaBot2 extends Bot {
+	
 
 	//get bothelper methods
 	private BotHelper bothelper = new BotHelper();
@@ -104,6 +105,7 @@ public class RheaBot2 extends Bot {
 	 */
 	public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets)
 	{
+		System.out.println("hi Rhea");
         for (int i=0; i<liveBots.length; i++) {
             double d = Math.abs(me.getX()-liveBots[i].getX())+Math.abs(me.getY()-liveBots[i].getY());
             if (d < 50) {
