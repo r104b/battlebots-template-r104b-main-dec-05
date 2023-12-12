@@ -83,75 +83,74 @@ public class BotHelper {
 		}
 		return closest;
 	}
-
-	public void shootBot() {
-
-	}
-
-	/**
-	 * Parses an array for null values and returns a new array with only non-null
-	 * entries
-	 * 
-	 * @param bullets A list of bullets, some of which are null
-	 * @return A new list, which no longer contains the null entries
-	 */
-	public Bullet[] cleanArray(Bullet[] bullets) {
-		// Count the number of valid entries in the array
-		int validCount = 0;
-		for (int i = 0; i < bullets.length; i++) {
-			if (bullets[i] != null)
-				validCount++;
-		}
-
-		if (validCount == 0)
-			return null;
-
-		// Generate a new array of the correct length
-		Bullet[] cleanBullets = new Bullet[validCount];
-
-		// Put the values into the correct array
-		int newIndex = 0;
-		for (int i = 0; i < bullets.length; i++) {
-			if (bullets[i] != null) {
-				cleanBullets[newIndex] = bullets[i];
-				newIndex++;
-			}
-		}
-		return cleanBullets;
-	}
-
-	/**
-	 * Parses an array for null values and returns a new array with only non-null
-	 * entries
-	 * 
-	 * @param botsIn
-	 * @return
-	 */
-
-	private BotInfo[] cleanArray(BotInfo[] botsIn) {
-		// Count the number of valid entries in the array
-
-		int validCount = 0;
-		for (int i = 0; i < botsIn.length; i++) {
-			if (botsIn[i] != null)
-				validCount++;
-		}
-
-		if (validCount == 0)
-			return null;
-
-		// Generate a new array of the correct length
-		BotInfo[] cleanArray = new BotInfo[validCount];
-
-		// Put the values into the correct array
-		int newIndex = 0;
-		for (int i = 0; i < botsIn.length; i++) {
-			if (botsIn[i] != null) {
-				cleanArray[newIndex] = botsIn[i];
-				newIndex++;
-			}
-		}
-
-		return cleanArray;
-	}
 }
+
+
+
+// 	/**
+// 	 * Parses an array for null values and returns a new array with only non-null
+// 	 * entries
+// 	 * 
+// 	 * @param bullets A list of bullets, some of which are null
+// 	 * @return A new list, which no longer contains the null entries
+// 	 */
+// 	public Bullet[] cleanArray(Bullet[] bullets) {
+// 		// Count the number of valid entries in the array
+// 		int validCount = 0;
+// 		for (int i = 0; i < bullets.length; i++) {
+// 			if (bullets[i] != null)
+// 				validCount++;
+// 		}
+
+// 		if (validCount == 0)
+// 			return null;
+
+// 		// Generate a new array of the correct length
+// 		Bullet[] cleanBullets = new Bullet[validCount];
+
+// 		// Put the values into the correct array
+// 		int newIndex = 0;
+// 		for (int i = 0; i < bullets.length; i++) {
+// 			if (bullets[i] != null) {
+// 				cleanBullets[newIndex] = bullets[i];
+// 				newIndex++;
+// 			}
+// 		}
+// 		return cleanBullets;
+// 	}
+
+// 	/**
+// 	 * Parses an array for null values and returns a new array with only non-null
+// 	 * entries
+// 	 * 
+// 	 * @param botsIn
+// 	 * @return
+// 	 */
+
+// 	private BotInfo[] cleanArray(BotInfo[] botsIn) {
+// 		// Count the number of valid entries in the array
+
+// 		int validCount = 0;
+// 		for (int i = 0; i < botsIn.length; i++) {
+// 			if (botsIn[i] != null)
+// 				validCount++;
+// 		}
+
+// 		if (validCount == 0)
+// 			return null;
+
+// 		// Generate a new array of the correct length
+// 		BotInfo[] cleanArray = new BotInfo[validCount];
+
+// 		// Put the values into the correct array
+// 		int newIndex = 0;
+// 		for (int i = 0; i < botsIn.length; i++) {
+// 			if (botsIn[i] != null) {
+// 				cleanArray[newIndex] = botsIn[i];
+// 				newIndex++;
+// 			}
+// 		}
+
+// 		return cleanArray;
+// 	}
+// }

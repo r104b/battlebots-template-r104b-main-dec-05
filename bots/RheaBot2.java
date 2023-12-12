@@ -98,88 +98,78 @@ public class RheaBot2 extends Bot {
 		}
 	}
 
-
-		// check for a bot that's too close
-
-        public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets) {
-            // Initialize variables to track the closest bot and its distance
-            BotInfo closestBot = null;
-            double closestDistance = Double.MAX_VALUE;
-        
-            // Find the closest live bot
-            for (BotInfo bot : liveBots) {
-                if (bot.getBotNumber() != me.getBotNumber()) { // Exclude your own bot
-                    double distance = Math.sqrt(Math.pow(me.getX() - bot.getX(), 2) + Math.pow(me.getY() - bot.getY(), 2));
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        closestBot = bot;
-                    }
-                }
-            }
-        
-            // If a closest bot is found and shooting is allowed, aim at it
-            if (closestBot != null && shotOK) {
-                double dX = closestBot.getX() - me.getX();
-                double dY = closestBot.getY() - me.getY();
-        
-                // Aim towards the closest bot based on its position relative to yours
-                if (Math.abs(dX) > Math.abs(dY)) {
-                    if (dX > 0) {
-                        return BattleBotArena.FIRERIGHT;
-                    } else {
-                        return BattleBotArena.FIRELEFT;
-                    }
-                } else {
-                    if (dY > 0) {
-                        return BattleBotArena.FIREDOWN;
-                    } else {
-                        return BattleBotArena.FIREUP;
-                    }
-                }
-            }
-        
-            return BattleBotArena.STAY; // Replace someDefaultValue with the appropriate default move
-        }
-		// for (int i=0; i<liveBots.length; i++)
-		// {
-		// 	if (!warned[liveBots[i].getBotNumber()]) // skip if already warned this Bot
-		// 	{
-		// 		// compute the Manhattan distance to the Bot
-        //         double dX = ((me.getX()-liveBots[i].getX()));
-		// 		double dY = Math.abs(+Math.abs(me.getY()-liveBots[i].getY()));
-		// 		if (dY < 50) {
-        //             move = BattleBotArena.FIREDOWN;
-        //             move = BattleBotArena.FIREUP;
-        //         } else if (dX < 50) {
-        //             move = BattleBotArena.FIRERIGHT;
-        //             move = BattleBotArena.FIRELEFT;
-		// 	}
-		// }
-
-		// 	int dir = (int)(Math.random()*4);
-		// 	if (dir == 0) {
-		// 		return BattleBotArena.FIRERIGHT;
-        //     }else if (dir == 1){
-		// 		return BattleBotArena.FIRELEFT;
-        //     }else if (dir == 2) {
-		// 		return BattleBotArena.FIREDOWN;
-        //     }else {
-		// 		return BattleBotArena.FIREUP;
-        
 	/**
 	 * Generate a random direction, then stick with it for a random count between
 	 * 30 and 90 moves. Randomly take a shot when done each move.
+	 */
+	public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets)
+	{
+        for (int i=0; i<liveBots.length; i++) {
+            double d = Math.abs(me.getX()-liveBots[i].getX())+Math.abs(me.getY()-liveBots[i].getY());
+            if (d < 50) {
+			    double dX = Math.abs(me.getX()-liveBots[i].getX());
+			    double dY = Math.abs(me.getY()-liveBots[i].getY());
+
+                	if (dY < 50) {
+                        move = BattleBotArena.FIREUP;
+                    }
+                    if (dX < 50) {
+                        move = BattleBotArena.FIRERIGHT;
+                    }
+                }
+            else if (d > 50) {
+			    int choice = (int)(Math.random()*8);
+
+                if (choice == 0)
+                {
+                    move = BattleBotArena.FIREUP;
+                    move = BattleBotArena.UP;
+                }
+                else if (choice == 1)
+                {
+                    move = BattleBotArena.FIREDOWN;
+                    move = BattleBotArena.DOWN;
+                }
+                else if (choice == 2)
+                {
+                    move = BattleBotArena.FIRELEFT;
+                    move = BattleBotArena.LEFT;
+                }
+                else if (choice == 3)
+                {
+                    move = BattleBotArena.FIRERIGHT;
+                    move = BattleBotArena.RIGHT;
+                }
+                else if (choice == 4)
+                {
+                    move = BattleBotArena.FIREUP;
+                }
+                else if (choice == 5)
+                {
+                    move = BattleBotArena.FIREDOWN;
+                }
+                else if (choice == 6)
+                {
+                    move = BattleBotArena.FIRELEFT;
+                }
+                else if (choice == 7)
+                {
+                    move = BattleBotArena.FIRERIGHT;
+                }
+            }
+        }
+        return move;
+
+	}
 
 
 
 
 	/**
-	 * Decide whether we are overheating this round or not
+	 * Decide whether we are overheating
 	 */
 	public void newRound()
-	{
-
-	 }
+	{}
 
 	/**
 	 * Send the message and then blank out the message string
@@ -240,12 +230,4 @@ public class RheaBot2 extends Bot {
 			msgCounter = (int)(Math.random()*30 + 30);
 		}
 	}
-
-	public void avoidBullet() {
-
-		
-	}
-
-	
-	
 }

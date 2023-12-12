@@ -97,10 +97,7 @@ public class RheaBot extends Bot {
 			current = up;
 		}
 	}
-	
 
-
-	
 	/**
 	 * Generate a random direction, then stick with it for a random count between
 	 * 30 and 90 moves. Randomly take a shot when done each move.
@@ -108,57 +105,59 @@ public class RheaBot extends Bot {
 	public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets)
 	{
 
-		// increase the move counter
 
-		
+		// shoot everywhere
 
-			moveCount = 0;
 			int choice = (int)(Math.random()*8);
+
 			if (choice == 0)
 			{
+				move = BattleBotArena.FIREUP;
 				move = BattleBotArena.UP;
-				current = up;
 			}
 			else if (choice == 1)
 			{
+				move = BattleBotArena.FIREDOWN;
 				move = BattleBotArena.DOWN;
-				current = down;
 			}
 			else if (choice == 2)
 			{
+				move = BattleBotArena.FIRELEFT;
 				move = BattleBotArena.LEFT;
-				current=left;
 			}
 			else if (choice == 3)
 			{
+				move = BattleBotArena.FIRERIGHT;
 				move = BattleBotArena.RIGHT;
-				current=right;
 			}
 			else if (choice == 4)
 			{
 				move = BattleBotArena.FIREUP;
-				moveCount = 99; // make sure we choose a new move next time
-				current=up;
 			}
 			else if (choice == 5)
 			{
 				move = BattleBotArena.FIREDOWN;
-				moveCount = 99; // make sure we choose a new move next time
-				current=down;
 			}
 			else if (choice == 6)
 			{
 				move = BattleBotArena.FIRELEFT;
-				moveCount = 99; // make sure we choose a new move next time
-				current=left;
 			}
 			else if (choice == 7)
 			{
 				move = BattleBotArena.FIRERIGHT;
-				moveCount = 99; // make sure we choose a new move next time
-				current=right;
 			}
-		
+
+		// for (int i=0; i<liveBots.length; i++) {
+		// 	double dX = Math.abs(me.getX()-liveBots[i].getX());
+		// 	double dY = Math.abs(me.getY()-liveBots[i].getY());
+
+		// 	if (dY < 50) {
+		// 		move = BattleBotArena.RIGHT;
+
+		// 	} else if (dX < 50) {
+		// 		move = BattleBotArena.DOWN;
+		// 	}
+		// }
 		return move;
 	}
 
