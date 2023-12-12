@@ -7,6 +7,8 @@ import arena.BattleBotArena;
 import arena.BotInfo;
 import arena.Bullet;
 
+
+
 /**
  * The RandBot is a very basic Bot that moves and shoots randomly. Sometimes it overheats.
  * It trash talks when it kills someone.
@@ -18,6 +20,8 @@ public class RheaBot extends Bot {
 
 	//get bothelper methods
 	private BotHelper bothelper = new BotHelper();
+
+	
 
 	/**
 	 * Next message to send, or null if nothing to send.

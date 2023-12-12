@@ -76,7 +76,7 @@ public class RheaBot2 extends Bot {
 	 */
 	public String[] imageNames()
 	{
-		String[] paths = {"pikachu_up.png", "pikachu_down.png", "pikachu_right.png", "pikachu_left.png"};
+		String[] paths = {"starfish4.png", "starfish4.png", "starfish4.png", "starfish4.png"};
 		return paths;
 	}
 
@@ -105,7 +105,62 @@ public class RheaBot2 extends Bot {
 	 */
 	public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets)
 	{
-		System.out.println("hi Rhea");
+
+			    int choice = (int)(Math.random()*4);
+
+                if (choice == 0)
+                {
+                    move = BattleBotArena.UP;
+                }
+                else if (choice == 1)
+                {
+                    move = BattleBotArena.DOWN;
+                }
+                else if (choice == 2)
+                {
+                    move = BattleBotArena.LEFT;
+                }
+                else if (choice == 3)
+                {
+					move = BattleBotArena.RIGHT;
+				} 
+        
+        return move;
+
+	}
+
+	public int getShot(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets)
+	{
+        for (int i=0; i<liveBots.length; i++) {
+            double d = Math.abs(me.getX()-liveBots[i].getX())+Math.abs(me.getY()-liveBots[i].getY());
+
+            if (d > 50) {
+			    int choiceShot = (int)(Math.random()*4);
+
+                if (choiceShot == 0)
+                {
+                    move = BattleBotArena.FIREUP;
+                }
+                else if (choiceShot == 1)
+                {
+                    move = BattleBotArena.FIREDOWN;
+                }
+                else if (choiceShot == 2)
+                {
+                    move = BattleBotArena.FIRELEFT;
+                }
+                else if (choiceShot == 3)
+                {
+                    move = BattleBotArena.FIRERIGHT;
+                }
+			}
+		}
+		return move;
+	}
+
+
+	public int shootBot(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets) 
+	{
         for (int i=0; i<liveBots.length; i++) {
             double d = Math.abs(me.getX()-liveBots[i].getX())+Math.abs(me.getY()-liveBots[i].getY());
             if (d < 50) {
@@ -115,55 +170,15 @@ public class RheaBot2 extends Bot {
                 	if (dY < 50) {
                         move = BattleBotArena.FIREUP;
                     }
+
                     if (dX < 50) {
                         move = BattleBotArena.FIRERIGHT;
-                    }
-                }
-            else if (d > 50) {
-			    int choice = (int)(Math.random()*8);
-
-                if (choice == 0)
-                {
-                    move = BattleBotArena.FIREUP;
-                    move = BattleBotArena.UP;
-                }
-                else if (choice == 1)
-                {
-                    move = BattleBotArena.FIREDOWN;
-                    move = BattleBotArena.DOWN;
-                }
-                else if (choice == 2)
-                {
-                    move = BattleBotArena.FIRELEFT;
-                    move = BattleBotArena.LEFT;
-                }
-                else if (choice == 3)
-                {
-                    move = BattleBotArena.FIRERIGHT;
-                    move = BattleBotArena.RIGHT;
-                }
-                else if (choice == 4)
-                {
-                    move = BattleBotArena.FIREUP;
-                }
-                else if (choice == 5)
-                {
-                    move = BattleBotArena.FIREDOWN;
-                }
-                else if (choice == 6)
-                {
-                    move = BattleBotArena.FIRELEFT;
-                }
-                else if (choice == 7)
-                {
-                    move = BattleBotArena.FIRERIGHT;
-                }
-            }
-        }
-        return move;
-
-	}
-
+					}
+				}
+			}
+			return move;
+		}
+	
 
 
 

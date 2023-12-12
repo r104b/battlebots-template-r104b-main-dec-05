@@ -164,15 +164,15 @@ public class BattleBotArena extends JPanel implements MouseListener, MouseWheelL
 	/**
 	 * Number of bullets on screen at once for each bot
 	 */
-	public static final int 	NUM_BULLETS = 8;
+	public static final int 	NUM_BULLETS = 4;
 	/**
 	 * Bot speed in pixels/frame
 	 */
-	public static final double 	BOT_SPEED = 5;//ROWBOTTOM changed from 2.5 to fix game balance and bots getting hung up on tombstones
+	public static final double 	BOT_SPEED = 3;//ROWBOTTOM changed from 2.5 to fix game balance and bots getting hung up on tombstones
 	/**
 	 * Bullet speed in pixels/frame
 	 */
-	public static final double 	BULLET_SPEED = 8;
+	public static final double 	BULLET_SPEED = 6;
 	/**
 	 * Maximum message length
 	 */
@@ -294,7 +294,7 @@ public class BattleBotArena extends JPanel implements MouseListener, MouseWheelL
 	/**
 	 * The current speed multiplier
 	 */
-	private int speed = 8;
+	private int speed = 6;
 	/**
 	 * Controls the flashing if the game is paused
 	 */
