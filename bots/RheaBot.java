@@ -1,4 +1,5 @@
 package bots;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,240 +8,153 @@ import arena.BattleBotArena;
 import arena.BotInfo;
 import arena.Bullet;
 
-
-
-/**
- * The RandBot is a very basic Bot that moves and shoots randomly. Sometimes it overheats.
- * It trash talks when it kills someone.
- *
- * @author Sam Scott
- * @version 1.0 (March 3, 2011)
- */
 public class RheaBot extends Bot {
 
-	//get bothelper methods
-	private BotHelper bothelper = new BotHelper();
+    private String nextMessage = null;
 
+    private String[] killMessages = {"ugly", "imbecile", "LALALALALALALA", "L", "Hahahahahahahahahaha :-)"};
+
+    Image current, up, down, right, left;
+
+    private String name = "atomBot";
+
+    private int moveCount = 99;
+
+    private int msgCounter = 0;
+
+    private int targetNum = (int) (Math.random() * BattleBotArena.NUM_BOTS);
+
+    private int sleep = (int) (Math.random() * 5 + 1);
 	
+    private boolean overheat = false;
 
-	/**
-	 * Next message to send, or null if nothing to send.
-	 */
-	private String nextMessage = null;
-	/**
-	 * An array of trash talk messages.
-	 */
-	private String[] killMessages = {"Woohoo!!!", "In your face!", "Pwned", "Take that.", "Gotcha!", "Too easy.", "Hahahahahahahahahaha :-)"};
-	/**
-	 * Bot image
-	 */
-	Image current, up, down, right, left;
-	/**
-	 * My name (set when getName() first called)
-	 */
-	private String name = null;
-	/**
-	 * Counter for timing moves in different directions
-	 */
-	private int moveCount = 99;
+    private int moveUpCounter = 0; // counter to track upward movements
 
-	//countdown
-	private int countDown = 0;
-	/**
-	 * Next move to make
-	 */
-	//get warned about other bots
-	private boolean[] warned;
+    private int moveUp = 1;
 
-	//messages warning
-	String[] messages = {"Stand back ","You are too close, ","Get back or face the consequences, ","Hands up, "};
+    public String[] imageNames() {
+        String[] paths = {"starfish4.png", "starfish4.png", "starfish4.png", "starfish4.png"};
+        return paths;
+    }
 
-	private int move = BattleBotArena.UP;
-	/**
-	 * Counter to pause before sending a victory message
-	 */
-	private int msgCounter = 0;
-	/**
-	 * Used to decide if this bot should overheat or not
-	 */
-	private int targetNum = (int)(Math.random()*BattleBotArena.NUM_BOTS);
-	/**
-	 * The amount to sleep to simulate overheating because of excessive CPU
-	 * usage.
-	 */
-	private int sleep = (int)(Math.random()*5+1);
-	/**
-	 * Set to True if we are trying to overheat
-	 */
-	private boolean overheat = false;
+    public void loadedImages(Image[] images) {
+        if (images != null) {
+            if (images.length > 0)
+                up = images[0];
+            if (images.length > 1)
+                down = images[1];
+            if (images.length > 2)
+                right = images[2];
+            if (images.length > 3)
+                left = images[3];
+            current = up;
+        }
+    }
 
-	/**
-	 * Return image names to load
-	 */
-	public String[] imageNames()
-	{
-		String[] paths = {"pikachu_up.png", "pikachu_down.png", "pikachu_right.png", "pikachu_left.png"};
-		return paths;
-	}
+    public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets) {
+        if (overheat) {
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                return BattleBotArena.SEND_MESSAGE;
+            }
+        }
 
-	/**
-	 * Store the images loaded by the arena
-	 */
-	public void loadedImages(Image[] images)
-	{
-		if (images != null)
-		{
-			if (images.length > 0)
-				up = images[0];
-			if (images.length > 1)
-				down = images[1];
-			if (images.length > 2)
-				right = images[2];
-			if (images.length > 3)
-				left = images[3];
-			current = up;
-		}
-	}
+        double starX = me.getX();
+        double starY = me.getY();
+        // BotHelper botHelper1 = new BotHelper();
+        // Bullet closestBullet = botHelper1.findClosest(me, bullets);
 
-	/**
-	 * Generate a random direction, then stick with it for a random count between
-	 * 30 and 90 moves. Randomly take a shot when done each move.
-	 */
-	public int getMove(BotInfo me, boolean shotOK, BotInfo[] liveBots, BotInfo[] deadBots, Bullet[] bullets)
-	{
+        //double distX = closestBullet - atomX;
 
+        
+        // System.out.println(BattleBotArena.TOP_EDGE);
+        // System.out.println(BattleBotArena.BOTTOM_EDGE);
 
-		// shoot everywhere
+        if (starY == 574){ // if bot touches the bottom then come back up
+            moveUp = 1;
+        }
+        if (starY == 10){ // if bot touches the top then come down
+            moveUp = 2;
+        }
+        
+        // } else {
+        //  moveUp = true;
+        // }
 
-			int choice = (int)(Math.random()*8);
+        // printing all the info to track
+        System.out.println("X: " + starX + " Y: " + starY + " Bullet: " + bullets + " Bot Number: " + botNumber);
 
-			if (choice == 0)
-			{
-				move = BattleBotArena.FIREUP;
-				move = BattleBotArena.UP;
-			}
-			else if (choice == 1)
-			{
-				move = BattleBotArena.FIREDOWN;
-				move = BattleBotArena.DOWN;
-			}
-			else if (choice == 2)
-			{
-				move = BattleBotArena.FIRELEFT;
-				move = BattleBotArena.LEFT;
-			}
-			else if (choice == 3)
-			{
-				move = BattleBotArena.FIRERIGHT;
-				move = BattleBotArena.RIGHT;
-			}
-			else if (choice == 4)
-			{
-				move = BattleBotArena.FIREUP;
-			}
-			else if (choice == 5)
-			{
-				move = BattleBotArena.FIREDOWN;
-			}
-			else if (choice == 6)
-			{
-				move = BattleBotArena.FIRELEFT;
-			}
-			else if (choice == 7)
-			{
-				move = BattleBotArena.FIRERIGHT;
-			}
+        // increase the move counter
+        moveCount++;
 
-		// for (int i=0; i<liveBots.length; i++) {
-		// 	double dX = Math.abs(me.getX()-liveBots[i].getX());
-		// 	double dY = Math.abs(me.getY()-liveBots[i].getY());
+        // Move up by one, shoot left, shoot right, and repeat
+        if (moveUpCounter < 1) {
+            moveUpCounter++;
+            if (moveUp == 1){
+                return BattleBotArena.UP;
+            } else {
+                return BattleBotArena.DOWN;
+            }
+        } else if (moveUpCounter == 1) {
+            moveUpCounter++;
+            return BattleBotArena.FIRELEFT;
+        } else if (moveUpCounter == 2) {
+            moveUpCounter = 0;
+            return BattleBotArena.FIRERIGHT;
+        }
+        // } else if (moveUpCounter == 3) {
+        //  moveUpCounter = 4;
+        //  return BattleBotArena.FIREUP;
+        // } else if (moveUpCounter == 4) {
+        //  moveUpCounter = 0;
+        //  return BattleBotArena.FIREDOWN;
+        // }
 
-		// 	if (dY < 50) {
-		// 		move = BattleBotArena.RIGHT;
+        // Is it time to send a message?
+        if (--msgCounter == 0) {
+            return BattleBotArena.SEND_MESSAGE;
+        }
 
-		// 	} else if (dX < 50) {
-		// 		move = BattleBotArena.DOWN;
-		// 	}
-		// }
-		return move;
-	}
+        return BattleBotArena.UP; 
+    }
 
+    public void newRound() {
+        if (botNumber >= targetNum - 3 && botNumber <= targetNum + 3)
+            overheat = true;
+        moveUpCounter = 0; // Reset the counter
+    }
 
+    public String outgoingMessage() {
+        String msg = nextMessage;
+        nextMessage = null;
+        return msg;
+    }
 
+    public String getName() {
+        if (name == null)
+            name = "Rand" + (botNumber < 10 ? "0" : "") + botNumber;
+        return name;
+    }
 
-	/**
-	 * Decide whether we are overheating this round or not
-	 */
-	public void newRound()
-	{
-	 	
-	 }
+    public String getTeamName() {
+        return "ARGARGARG";
+    }
 
-	/**
-	 * Send the message and then blank out the message string
-	 */
-	public String outgoingMessage()
-	{
-		String msg = nextMessage;
-		nextMessage = null;
-		return msg;
-	}
+    public void draw(Graphics g, int x, int y) {
+        if (current != null)
+            g.drawImage(current, x, y, Bot.RADIUS * 2, Bot.RADIUS * 2, null);
+        else {
+            g.setColor(Color.lightGray);
+            g.fillOval(x, y, Bot.RADIUS * 2, Bot.RADIUS * 2);
+        }
+    }
 
-	/**
-	 * Construct and return my name
-	 */
-	public String getName()
-	{
-		if (name == null)
-			name = "Rhea"+(botNumber<10?"0":"")+botNumber;
-		return name;
-	}
-
-	/**
-	 * Team "Arena"
-	 */
-	public String getTeamName()
-	{
-		return "Arena";
-	}
-
-	/**
-	 * Draws the bot at x, y
-	 * @param g The Graphics object to draw on
-	 * @param x Left coord
-	 * @param y Top coord
-	 */
-	public void draw (Graphics g, int x, int y)
-	{
-		if (current != null)
-			g.drawImage(current, x, y, Bot.RADIUS*2, Bot.RADIUS*2, null);
-		else
-		{
-			g.setColor(Color.lightGray);
-			g.fillOval(x, y, Bot.RADIUS*2, Bot.RADIUS*2);
-		}
-	}
-
-	/**
-	 * If the message is announcing a kill for me, schedule a trash talk message.
-	 * @param botNum ID of sender
-	 * @param msg Text of incoming message
-	 */
-	public void incomingMessage(int botNum, String msg)
-	{
-		if (botNum == BattleBotArena.SYSTEM_MSG && msg.matches(".*destroyed by "+getName()+".*"))
-		{
-			int msgNum = (int)(Math.random()*killMessages.length);
-			nextMessage = killMessages[msgNum];
-			msgCounter = (int)(Math.random()*30 + 30);
-		}
-	}
-
-	public void avoidBullet() {
-
-		
-	}
-
-	
-	
+    public void incomingMessage(int botNum, String msg) {
+        if (botNum == BattleBotArena.SYSTEM_MSG && msg.matches(".*destroyed by " + getName() + ".*")) {
+            int msgNum = (int) (Math.random() * killMessages.length);
+            nextMessage = killMessages[msgNum];
+            msgCounter = (int) (Math.random() * 30 + 30);
+        }
+    }
 }
